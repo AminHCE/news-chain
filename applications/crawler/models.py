@@ -10,6 +10,9 @@ class Agency(models.Model):
     pub_date_tag = models.CharField(max_length=100, blank=True, null=True)
     link_tag = models.CharField(max_length=100, blank=True, null=True)
 
+    class Meta:
+        verbose_name_plural = 'Agencies'
+
     def __str__(self):
         return self.name
 
@@ -20,5 +23,16 @@ class News(models.Model):
     link = models.URLField(blank=True, null=True)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE, blank=True, null=True)
 
+    class Meta:
+        verbose_name_plural = 'News'
+
     def __str__(self):
         return self.title
+
+
+class Config(models.Model):
+    start_time = models.TimeField(blank=True, null=True)
+    frequency = models.DurationField(blank=True, null=True)
+
+    def __str__(self):
+        return 'crawling at {}'.format(self.start_time)
