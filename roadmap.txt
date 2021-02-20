@@ -1,0 +1,14 @@
+News Chain Project
+With AliKh93 and AminHCE
+
+roadmap:
+1. Github repo
+2. Create project
+3. News Agency database
+4. Crawler:
+    - update config
+    - add crown
+5. Block Chain
+6. Deployment
+
+GitHub: https://github.com/AminHCE/news-chain
