@@ -5,5 +5,11 @@ from .models import Agency, News, Config
 
 # Register your models here.
 admin.site.register(Agency)
-admin.site.register(News)
+
+
+@admin.register(News)
+class ProjectAdmin(admin.ModelAdmin):
+    save_as = True
+
+
 admin.site.register(Config)
