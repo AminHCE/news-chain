@@ -1,3 +1,4 @@
+import datetime
 import hashlib
 import json
 
@@ -27,10 +28,11 @@ class News(models.Model):
     pub_date = models.DateTimeField(blank=True, null=True)
     link = models.URLField(blank=True, null=True)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE, blank=True, null=True)
+    creation = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'News'
-        ordering = ['pub_date']
+        ordering = ['creation']
 
     def __str__(self):
         return self.title
@@ -42,23 +44,18 @@ class News(models.Model):
             "link": self.link,
             "agency": self.agency.name
         }
-        # print(json.dumps(data).encode())
-        return json.dumps(data).encode()
+        return hashlib.sha512(json.dumps(data).encode()).hexdigest()
 
     def uncle_chain_weaver(self):
-        # last_news = News.objects.latest('pub_date')
-        # print(last_news)
         try:
-            last_news = News.objects.latest('pub_date')
-            # print(last_news)
-            return hashlib.sha512(str(last_news.token) + str(self.json_chain())).hexdigest()
+            last_news = News.objects.latest('creation')
+            return hashlib.sha512(f'{last_news.token}{self.json_chain()}'.encode()).hexdigest()
         except:
-            return hashlib.sha512(self.json_chain()).hexdigest()
+            return hashlib.sha512(self.json_chain().encode()).hexdigest()
 
     def save(self, *args, **kwargs):
-        # print(len(self.uncle_chain_weaver()))
-        self.token = self.uncle_chain_weaver()
-        # print(self.token)
+        if not self.token:
+            self.token = self.uncle_chain_weaver()
         super(News, self).save()
 
 

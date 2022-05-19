@@ -10,6 +10,7 @@ admin.site.register(Agency)
 @admin.register(News)
 class ProjectAdmin(admin.ModelAdmin):
     save_as = True
+    readonly_fields = ['token']
 
 
 admin.site.register(Config)
